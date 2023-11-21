@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Library Management System</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            background-image: url('https://img.freepik.com/free-vector/education-background-with-books-ceiling-lamp_53876-115359.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #2ecc71;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 36px;
+        }
+
+        .logo-left img,
+        .logo-right img {
+            width: 100px;
+            height: auto;
+        }
+
+        .scrolling-text {
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .scrolling-text span {
+            animation: scrolling 20s linear infinite;
+        }
+
+        @keyframes scrolling {
+            0% {
+                transform: translateX(100%);
+            }
+
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        .section-text {
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .section-text span {
+            animation: scrolling-section 10s linear infinite;
+        }
+
+        @keyframes scrolling-section {
+            0% {
+                transform: translateX(100%);
+            }
+
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        section {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        h2 {
+            font-size: 24px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            margin: 10px 0;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #2ecc71;
+            color: #fff;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            margin-right: 10px;
+        }
+
+        .button1 {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #2ecc71;
+            color: black;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            margin-right: 10px;
+        }
+
+        .button:hover {
+            background-color: #27ae60;
+        }
+
+        .logo-left {
+            float: left;
+        }
+
+        .logo-right {
+            float: right;
+        }
+
+        .footer {
+            background-color: #3498db;
+            color: #fff;
+            text-align: center;
+            padding: 1px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            line-height: 0.8;
+        }
+
+        table {
+            display: inline-block;
+            padding: 10px;
+            border: 1px solid #000;
+            background-color: #f0f0f0;
+            font-weight: bold;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #2ecc71;
+            color: #fff;
+        }
+
+        ul {
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo-left">
+            <img src="https://www.logolynx.com/images/logolynx/9a/9ae8af23bbd1ab1cb3647da09c4f7465.jpeg" alt="Left Logo">
+        </div>
+        <div class="logo-right">
+            <img src="https://www.logolynx.com/images/logolynx/9a/9ae8af23bbd1ab1cb3647da09c4f7465.jpeg" alt="Right Logo">
+        </div>
+        <h1 align=center>Library Management System</h1>
+    </header>
+    <h1>
+        <span class="section-text">
+            <marquee behavior="scroll" direction="left">Welcome to Our Library!</marquee>
+        </span>
+    </h1>
+    <section>
+        <div>
+            <a href="/book_index" class="button1">Library Books Management</a>
+            <a href="/library_members_index" class="button1">Library Members Management</a>
+            <a href="/library_loans_index" class="button1">Librray Book Loans Management</a>
+            <a href="/authors_index" class="button1">Book Authors Management</a>
+        </div>
+        <br> <br>
+        <table>
+            <thead>
+                <tr>
+                    <th>Module</th>
+                    <th>Features</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Browse Books</td>
+                    <td>
+                        <ul>
+                            <li>- View/Add/Update/Delete Available Books</li>
+                            <li>- Search and Filter Books</li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Library Members</td>
+                    <td>
+                        <ul>
+                            <li>- View/Manage Library Members</li>
+                            <li>- Add New Members</li>
+                            <li>- Update Member Information</li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Book Loans</td>
+                    <td>
+                        <ul>
+                            <li>- View/Manage Book Loans</li>
+                            <li>- Issue Book Loans</li>
+                            <li>- Return Books</li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Book Authors</td>
+                    <td>
+                        <ul>
+                            <li>- View/Manage Book Authors</li>
+                            <li>- Add Authors Members</li>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <br><br><br><br><br><br><br><br>
+
+    </section>
+    <div class="footer">
+        <p> <strong>Fall2023_CS665_Group#5 &copy; All rights reserved.</strong></p>
+        <div id="authorsDetails" style="display: none;">
+            <p>1. Potla Anusha - C446Z774</p>
+            <p>2. Jane Smith</p>
+        </div>
+        <button id="toggleAuthors" onclick="toggleAuthors()">&#x25B2;</button>
+    </div>
+
+    <script>
+        function toggleAuthors() {
+            var authorsDetails = document.getElementById("authorsDetails");
+            var toggleButton = document.getElementById("toggleAuthors");
+
+            if (authorsDetails.style.display === "none") {
+                authorsDetails.style.display = "block";
+                toggleButton.innerHTML = "&#x25BC;";
+            } else {
+                authorsDetails.style.display = "none";
+                toggleButton.innerHTML = "&#x25B2;";
+            }
+        }
+    </script>
+</body>
+
+</html>

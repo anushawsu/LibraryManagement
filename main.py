@@ -23,7 +23,52 @@ def get_db():
         db = g._database = sqlite3.connect('CS665_Group5_Library.db')
     return db
 
+with app.app_context():
+    conn = get_db()
+    cursor = conn.cursor()
+    # Create the Book Table
+    cursor.execute('''CREATE TABLE IF NOT EXISTS Book (
+                        ISBN INTEGER PRIMARY KEY AUTOINCREMENT,
+                        Title TEXT,
+                        Author TEXT,
+                        Edition TEXT,
+                        PublishedYear INTEGER,
+                        BookLocation TEXT
+                    )''')
 
+    # Create the Author Table
+    cursor.execute('''CREATE TABLE IF NOT EXISTS Author (
+                    AuthorID INTEGER PRIMARY KEY AUTOINCREMENT,
+                    AuthorName TEXT,
+                    AuthorNationality TEXT,
+                    AuthorEmail TEXT,
+                    AuthorWebsite TEXT
+                )''')
+
+    # Create the Library Member Table
+    cursor.execute('''CREATE TABLE IF NOT EXISTS LibraryMember (
+                        MemberID INTEGER PRIMARY KEY AUTOINCREMENT,
+                        FirstName TEXT,
+                        LastName TEXT,
+                        Address TEXT,
+                        Mobile TEXT,
+                        Email TEXT
+                    )''')
+
+    # Create the Book Loan Table
+    cursor.execute('''CREATE TABLE IF NOT EXISTS BookLoan (
+                        LoanID INTEGER PRIMARY KEY AUTOINCREMENT,
+                        ISBN INTEGER,
+                        MemberID INTEGER,
+                        LoanDate TEXT,
+                        ReturnDate TEXT,
+                        FOREIGN KEY (ISBN) REFERENCES Book(ISBN),
+                        FOREIGN KEY (MemberID) REFERENCES LibraryMember(MemberID)
+                    )''')
+
+    conn.commit()
+    cursor.close()
+    conn.close()
 
     # Run the application
 if __name__ == '__main__':

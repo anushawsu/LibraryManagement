@@ -75,6 +75,33 @@ with app.app_context():
 def index():
     return render_template('index.html')
 
+# Define a route for displaying authors
+@app.route('/authors_index', methods=['GET', 'POST'])
+def authors_index():
+    # Connect to the database
+    conn = get_db()
+    cursor = conn.cursor()
+
+    if request.method == 'POST':
+        # If a search form is submitted
+        search_query = request.form.get('search')
+        cursor.execute('''
+            SELECT * FROM Author
+            WHERE AuthorID LIKE ? OR AuthorName LIKE ? OR AuthorNationality LIKE ? OR AuthorEmail LIKE ? OR AuthorWebsite LIKE ?
+        ''', ('%' + search_query + '%', '%' + search_query + '%', '%' + search_query + '%', '%' + search_query + '%', '%' + search_query + '%'))
+        authors = cursor.fetchall()
+    else:
+        # Retrieve all authors from the Author table
+        cursor.execute('SELECT * FROM Author')
+        authors = cursor.fetchall()
+
+    # Close the cursor and database connection
+    cursor.close()
+    conn.close()
+
+    # Render the template with the list of authors
+    return render_template('authors_index.html', authors=authors)
+
 
 
 

@@ -102,6 +102,60 @@ def authors_index():
     # Render the template with the list of authors
     return render_template('authors_index.html', authors=authors)
 
+#Add Author
+@app.route('/add_author', methods=['GET', 'POST'])
+def add_author():
+    if request.method == 'POST':
+        # Get form data
+        author_name = request.form.get('author_name')
+        author_nationality = request.form.get('author_nationality')
+        author_email = request.form.get('author_email')
+        author_website = request.form.get('author_website')
+
+        # Generate a 5-digit author ID
+        author_id = generate_author_id()
+
+        # Connect to the database
+        conn = get_db()
+        cursor = conn.cursor()
+
+        # Insert a new author into the Author table
+        cursor.execute('''
+            INSERT INTO Author (AuthorID, AuthorName, AuthorNationality, AuthorEmail, AuthorWebsite)
+            VALUES (?, ?, ?, ?, ?)
+        ''', (author_id, author_name, author_nationality, author_email, author_website))
+
+        # Commit the changes and close the cursor and database connection
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        # Redirect to the authors index page
+        return redirect('/authors_index')
+    else:
+        return render_template('add_author.html')
+
+def generate_author_id():
+    # Generate a random 5-digit number as the author ID
+    return str(random.randint(10000, 99999))
+
+#Delete Author
+@app.route('/delete_author/<int:author_id>', methods=['POST'])
+def delete_author(author_id):
+    # Connect to the database
+    conn = get_db()
+    cursor = conn.cursor()
+
+    # Delete the author from the Author table based on the given author_id
+    cursor.execute('DELETE FROM Author WHERE AuthorID = ?', (author_id,))
+
+    # Commit the changes and close the cursor and database connection
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    # Redirect to the authors index page
+    return redirect('/authors_index')
 
 
 

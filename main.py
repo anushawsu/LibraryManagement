@@ -287,6 +287,70 @@ def generate_isbn():
     # Generate a random 10-digit number as the ISBN
     return str(random.randint(1000000000, 9999999999))
 
+# Update the route for rendering the update book page
+@app.route('/book_update/<int:isbn>', methods=['GET', 'POST'])
+def book_update(isbn):
+    # Connect to the database
+    conn = get_db()
+    cursor = conn.cursor()
+
+    if request.method == 'POST':
+        # Get form data
+        title = request.form.get('title')
+        author = request.form.get('author')
+        edition = request.form.get('edition')
+        published_year = request.form.get('published_year')
+        book_location = request.form.get('book_location')
+
+        # Update the book in the Book table based on the given ISBN
+        cursor.execute('''
+            UPDATE Book
+            SET Title = ?, Author = ?, Edition = ?, PublishedYear = ?, BookLocation = ?
+            WHERE ISBN = ?
+        ''', (title, author, edition, published_year, book_location, isbn))
+
+        # Commit the changes and close the cursor and database connection
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        # Redirect to the book index page after updating
+        return redirect('/book_index')
+    else:
+        # Retrieve existing book details for the specified ISBN
+        cursor.execute('SELECT * FROM Book WHERE ISBN = ?', (isbn,))
+        book_details = cursor.fetchone()
+        cursor.execute('SELECT AuthorName FROM Author WHERE AuthorID = ?', (book_details[2],))
+        authorname = cursor.fetchone()[0]
+
+        # Close the cursor and database connection
+        cursor.close()
+        conn.close()
+
+        if book_details:
+            # Render the update_book.html template with the existing book details
+            return render_template('update_book.html', book=book_details, aname=authorname)
+        else:
+            # Handle case where ISBN is not found
+            return "Book not found."
+        
+        # Define a route for deleting a book
+@app.route('/book_delete/<int:isbn>', methods=['POST'])
+def delete_book(isbn):
+    # Connect to the database
+    conn = get_db()
+    cursor = conn.cursor()
+
+    # Delete the book from the Book table based on the given ISBN
+    cursor.execute('DELETE FROM Book WHERE ISBN = ?', (isbn,))
+
+    # Commit the changes and close the cursor and database connection
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    # Redirect to the book index page
+    return redirect('/book_index')
 
 
 

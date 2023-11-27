@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Library Management System - Update Author</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        header {
+            background-color: #2ecc71;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 36px;
+        }
+
+        section {
+            margin: 20px;
+        }
+
+        h2 {
+            font-size: 24px;
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            max-width: 300px;
+            margin: auto;
+        }
+
+        label {
+            margin-bottom: 10px;
+        }
+
+        input {
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+
+        button {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .back-button {
+            background-color: #3498db;
+            color: #fff;
+            margin-right: 10px;
+        }
+
+        .back-button:hover {
+            background-color: #2980b9;
+        }
+
+        .update-button {
+            background-color: #2ecc71;
+            color: #fff;
+        }
+
+        .update-button:hover {
+            background-color: #27ae60;
+        }
+
+        .footer {
+            background-color: #3498db;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Library Management System</h1>
+    </header>
+
+    <section>
+        <h2 align="center">Update Author</h2>
+        <form action="{{ url_for('update_author', author_id=author[0]) }}" method="POST">
+            <label for="author_name">Author Name:</label>
+            <input type="text" name="author_name" value="{{ author[1]}}" required>
+        
+            <label for="author_nationality">Author Nationality:</label>
+            <input type="text" name="author_nationality" value="{{ author[2] }}" required>
+        
+            <label for="author_email">Author Email:</label>
+            <input type="email" name="author_email" value="{{ author[3] }}" required>
+        
+            <label for="author_website">Author Website:</label>
+            <input type="url" name="author_website" value="{{ author[4] }}" required>
+        
+            <div class="button-container">
+                <button type="button" onclick="window.location.href='/authors_index'" class="back-button">Back to Authors Index</button>
+                <button type="submit" class="update-button">Update Author</button>
+            </div>
+        </form>        
+    </section>
+</body>
+
+</html>

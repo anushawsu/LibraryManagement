@@ -375,6 +375,32 @@ def delete_book(isbn):
     # Redirect to the book index page
     return redirect('/book_index')
 
+# Define a route for displaying all library members
+@app.route('/library_members_index', methods=['GET', 'POST'])
+def library_members_index():
+    # Connect to the database
+    conn = get_db()
+    cursor = conn.cursor()
+
+    if request.method == 'POST':
+        # If a search form is submitted
+        search_query = request.form.get('search')
+        cursor.execute('''
+            SELECT * FROM LibraryMember
+            WHERE MemberID LIKE ? OR FirstName LIKE ? OR LastName LIKE ? OR Address LIKE ? OR Mobile LIKE ? OR Email LIKE ?
+        ''', ('%' + search_query + '%', '%' + search_query + '%', '%' + search_query + '%', '%' + search_query + '%', '%' + search_query + '%', '%' + search_query + '%'))
+        members = cursor.fetchall()
+    else:
+        # Retrieve all library members from the LibraryMember table
+        cursor.execute('SELECT * FROM LibraryMember')
+        members = cursor.fetchall()
+
+    # Close the cursor and database connection
+    cursor.close()
+    conn.close()
+
+    # Render the template with the list of library members
+    return render_template('library_members_index.html', members=members)
 
 
 

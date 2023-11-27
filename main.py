@@ -139,6 +139,52 @@ def generate_author_id():
     # Generate a random 5-digit number as the author ID
     return str(random.randint(10000, 99999))
 
+# Update Author
+@app.route('/update_author/<int:author_id>', methods=['GET', 'POST'])
+def update_author(author_id):
+    # Connect to the database
+    conn = get_db()
+    cursor = conn.cursor()
+
+    if request.method == 'POST':
+        # Get form data
+        author_name = request.form.get('author_name')
+        author_nationality = request.form.get('author_nationality')
+        author_email = request.form.get('author_email')
+        author_website = request.form.get('author_website')
+
+        # Update the author in the Author table based on the given author_id
+        cursor.execute('''
+            UPDATE Author
+            SET AuthorName = ?, AuthorNationality = ?, AuthorEmail = ?, AuthorWebsite = ?
+            WHERE AuthorID = ?
+        ''', (author_name, author_nationality, author_email, author_website, author_id))
+
+        # Commit the changes and close the cursor and database connection
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        # Redirect to the authors index page after updating
+        return redirect('/authors_index')
+    else:
+        # Retrieve existing author details for the specified author_id
+        cursor.execute('SELECT * FROM Author WHERE AuthorID = ?', (author_id,))
+        author_details = cursor.fetchone()
+
+        # Close the cursor and database connection
+        cursor.close()
+        conn.close()
+
+        if author_details:
+            # Render the update_author.html template with the existing author details
+            return render_template('update_author.html', author=author_details)
+        else:
+            # Handle case where author_id is not found
+            return "Author not found."
+
+
+
 #Delete Author
 @app.route('/delete_author/<int:author_id>', methods=['POST'])
 def delete_author(author_id):

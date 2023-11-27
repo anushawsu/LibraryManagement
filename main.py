@@ -489,6 +489,24 @@ def update_member(member_id):
         else:
             # Handle case where member_id is not found
             return "Library member not found."
+        
+        # Delete Member
+@app.route('/delete_member/<int:member_id>', methods=['POST'])
+def delete_member(member_id):
+    # Connect to the database
+    conn = get_db()
+    cursor = conn.cursor()
+
+    # Delete the member from the LibraryMember table based on the given member_id
+    cursor.execute('DELETE FROM LibraryMember WHERE MemberID = ?', (member_id,))
+
+    # Commit the changes and close the cursor and database connection
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    # Redirect to the library members index page
+    return redirect('/library_members_index')
 
 
 

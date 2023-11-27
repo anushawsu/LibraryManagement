@@ -159,6 +159,52 @@ def delete_author(author_id):
 
 
 
+# Add_book route
+@app.route('/add_book', methods=['GET', 'POST'])
+def add_book():
+    if request.method == 'POST':
+        # Get form data
+        title = request.form.get('title')
+        author_id = request.form.get('author')  # Use author_id instead of author name
+        edition = request.form.get('edition')
+        published_year = request.form.get('published_year')
+        book_location = request.form.get('book_location')
+
+        # Generate a new ISBN
+        isbn = generate_isbn()
+
+        # Connect to the database
+        conn = get_db()
+        cursor = conn.cursor()
+
+        # Insert a new book into the Book table
+        cursor.execute('''
+            INSERT INTO Book (ISBN, Title, Author, Edition, PublishedYear, BookLocation)
+            VALUES (?, ?, ?, ?, ?, ?)
+        ''', (isbn, title, author_id, edition, published_year, book_location))
+
+        # Commit the changes and close the cursor and database connection
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        # Redirect to the book index page
+        return redirect('/book_index')
+    else:
+        # Fetch authors for the dropdown
+        conn = get_db()
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM Author')
+        authors = cursor.fetchall()
+        cursor.close()
+        conn.close()
+
+        return render_template('add_book.html', authors=authors)
+
+def generate_isbn():
+    # Generate a random 10-digit number as the ISBN
+    return str(random.randint(1000000000, 9999999999))
+
 
 
 

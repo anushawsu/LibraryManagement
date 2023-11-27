@@ -203,7 +203,43 @@ def delete_author(author_id):
     # Redirect to the authors index page
     return redirect('/authors_index')
 
+# Home page
+@app.route('/')
+def index():
+    return render_template('index.html')
 
+# Route for displaying all books
+@app.route('/book_index', methods=['GET', 'POST'])
+def book_index():
+    # Connect to the database
+    conn = get_db()
+    cursor = conn.cursor()
+
+    if request.method == 'POST':
+        # If a search form is submitted
+        search_query = request.form.get('search')
+        cursor.execute('''
+            SELECT Book.ISBN, Book.Title, Author.AuthorName, Book.Edition, Book.PublishedYear, Book.BookLocation
+            FROM Book
+            INNER JOIN Author ON Book.Author = Author.AuthorID
+            WHERE Book.Title LIKE ? OR Author.AuthorName LIKE ? OR Book.BookLocation LIKE ?
+        ''', ('%' + search_query + '%', '%' + search_query + '%', '%' + search_query + '%'))
+        books = cursor.fetchall()
+    else:
+        # Retrieve all books from the Book table with author names
+        cursor.execute('''
+            SELECT Book.ISBN, Book.Title, Author.AuthorName, Book.Edition, Book.PublishedYear, Book.BookLocation
+            FROM Book
+            INNER JOIN Author ON Book.Author = Author.AuthorID
+        ''')
+        books = cursor.fetchall()
+
+    # Close the cursor and database connection
+    cursor.close()
+    conn.close()
+
+    # Render the template with the list of books
+    return render_template('book_index.html', books=books)
 
 # Add_book route
 @app.route('/add_book', methods=['GET', 'POST'])
@@ -250,6 +286,7 @@ def add_book():
 def generate_isbn():
     # Generate a random 10-digit number as the ISBN
     return str(random.randint(1000000000, 9999999999))
+
 
 
 

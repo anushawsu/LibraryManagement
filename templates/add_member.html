@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Library Management System - Add New Member</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        header {
+            background-color: #2ecc71;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 36px;
+        }
+
+        section {
+            margin: 20px;
+        }
+
+        h2 {
+            font-size: 24px;
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            max-width: 300px;
+            margin: auto;
+        }
+
+        label {
+            margin-bottom: 10px;
+        }
+
+        input {
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+
+        button {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .back-button {
+            background-color: #3498db;
+            color: #fff;
+            margin-right: 10px;
+        }
+
+        .back-button:hover {
+            background-color: #2980b9;
+        }
+
+        .add-button {
+            background-color: #2ecc71;
+            color: #fff;
+        }
+
+        .add-button:hover {
+            background-color: #27ae60;
+        }
+
+        .footer {
+            background-color: #3498db;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Library Management System</h1>
+    </header>
+
+    <section>
+        <h2 align="center">Add New Member</h2>
+
+        <form action="/add_member" method="POST">
+            <label for="first_name">First Name:</label>
+            <input type="text" name="first_name" required>
+
+            <label for="last_name">Last Name:</label>
+            <input type="text" name="last_name" required>
+
+            <label for="address">Address:</label>
+            <input type="text" name="address" required>
+
+            <label for="mobile">Mobile:</label>
+            <input type="text" name="mobile" required>
+
+            <label for="email">Email:</label>
+            <input type="text" name="email" required>
+
+            <div style="display: flex; justify-content: center;">
+                <button type="button" onclick="window.location.href='/library_members_index'" class="back-button">Back to Library Members</button>
+                <button type="submit" class="add-button">Add Member</button>
+            </div>
+        </form>
+    </section>
+</body>
+
+</html>

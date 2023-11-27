@@ -402,6 +402,49 @@ def library_members_index():
     # Render the template with the list of library members
     return render_template('library_members_index.html', members=members)
 
+# Add the route for the "Add Member" page
+@app.route('/add_member', methods=['GET', 'POST'])
+def add_member():
+    if request.method == 'POST':
+        # Get form data
+        first_name = request.form.get('first_name')
+        last_name = request.form.get('last_name')
+        address = request.form.get('address')
+        mobile = request.form.get('mobile')
+        email = request.form.get('email')
+
+        # Generate a new MemberID
+        member_id = generate_member_id()
+
+        # Connect to the database
+        conn = get_db()
+        cursor = conn.cursor()
+
+        try:
+            # Insert a new library member into the LibraryMember table
+            cursor.execute('''
+                INSERT INTO LibraryMember (MemberID, FirstName, LastName, Address, Mobile, Email)
+                VALUES (?, ?, ?, ?, ?, ?)
+            ''', (member_id, first_name, last_name, address, mobile, email))
+
+            # Commit the changes and close the cursor and database connection
+            conn.commit()
+            cursor.close()
+            conn.close()
+
+            # Redirect to the members index page
+            return redirect('/library_members_index')
+        except sqlite3.IntegrityError as e:
+            # Handle integrity errors (e.g., duplicate member ID)
+            error_message = str(e)
+            return render_template('add_member.html', error_message=error_message)
+    else:
+        return render_template('add_member.html')
+
+def generate_member_id():
+    # Generate a random 5-digit number as the member ID
+    return str(random.randint(10000, 99999))
+
 
 
 

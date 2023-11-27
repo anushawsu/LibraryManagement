@@ -445,6 +445,51 @@ def generate_member_id():
     # Generate a random 5-digit number as the member ID
     return str(random.randint(10000, 99999))
 
+# Update Library Member
+@app.route('/update_member/<int:member_id>', methods=['GET', 'POST'])
+def update_member(member_id):
+    # Connect to the database
+    conn = get_db()
+    cursor = conn.cursor()
+
+    if request.method == 'POST':
+        # Get form data
+        first_name = request.form.get('first_name')
+        last_name = request.form.get('last_name')
+        address = request.form.get('address')
+        mobile = request.form.get('mobile')
+        email = request.form.get('email')
+
+        # Update the library member in the LibraryMember table based on the given member_id
+        cursor.execute('''
+            UPDATE LibraryMember
+            SET FirstName = ?, LastName = ?, Address = ?, Mobile = ?, Email = ?
+            WHERE MemberID = ?
+        ''', (first_name, last_name, address, mobile, email, member_id))
+
+        # Commit the changes and close the cursor and database connection
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        # Redirect to the library members index page after updating
+        return redirect('/library_members_index')
+    else:
+        # Retrieve existing library member details for the specified member_id
+        cursor.execute('SELECT * FROM LibraryMember WHERE MemberID = ?', (member_id,))
+        member_details = cursor.fetchone()
+
+        # Close the cursor and database connection
+        cursor.close()
+        conn.close()
+
+        if member_details:
+            # Render the update_member.html template with the existing library member details
+            return render_template('update_member.html', member=member_details)
+        else:
+            # Handle case where member_id is not found
+            return "Library member not found."
+
 
 
 

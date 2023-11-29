@@ -625,6 +625,25 @@ def update_loan(loan_id):
             # Handle case where LoanID is not found
             return "Loan not found."
 
+# Route for deleting a loan record
+@app.route('/delete_loan/<string:loan_id>', methods=['POST'])
+def delete_loan(loan_id):
+    # Connect to the database
+    conn = get_db()
+    cursor = conn.cursor()
+
+    # Delete the loan record from the BookLoan table based on the given loan_id
+    cursor.execute('DELETE FROM BookLoan WHERE LoanID = ?', (loan_id,))
+
+    # Commit the changes and close the cursor and database connection
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    # Redirect to the library loans index page
+    return redirect('/library_loans_index')
+
+
 
 
 

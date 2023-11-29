@@ -508,7 +508,31 @@ def delete_member(member_id):
     # Redirect to the library members index page
     return redirect('/library_members_index')
 
+# Route to view loan details
+@app.route('/loan_details/<string:loan_id>', methods=['GET'])
+def loan_details(loan_id):
+    # Connect to the database
+    conn = get_db()
+    cursor = conn.cursor()
 
+    # Retrieve loan details from the BookLoan table based on the given LoanID
+    cursor.execute('SELECT * FROM BookLoan WHERE LoanID = ?', (loan_id,))
+    loan_details = cursor.fetchone()
+
+    if loan_details:
+        # Retrieve member details using the MemberID from the loan details
+        cursor.execute('SELECT * FROM LibraryMember WHERE MemberID = ?', (loan_details[2],))
+        member_details = cursor.fetchone()
+
+        # Close the cursor and database connection
+        cursor.close()
+        conn.close()
+
+        # Render the loan details template with loan and member details
+        return render_template('loan_details_template.html', loan=loan_details, member=member_details)
+    else:
+        # Handle case where LoanID is not found
+        return "Loan not found."
 
 
 

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management System - Update Loan</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        header {
+            background-color: #2ecc71;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 36px;
+        }
+
+        section {
+            margin: 20px;
+        }
+
+        h2 {
+            font-size: 24px;
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            max-width: 300px;
+            margin: auto;
+        }
+
+        label {
+            margin-bottom: 10px;
+        }
+
+        input {
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+
+        button {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .back-button {
+            background-color: #3498db;
+            color: #fff;
+            margin-right: 10px;
+        }
+
+        .back-button:hover {
+            background-color: #2980b9;
+        }
+
+        .update-button {
+            background-color: #2ecc71;
+            color: #fff;
+        }
+
+        .update-button:hover {
+            background-color: #27ae60;
+        }
+
+        .footer {
+            background-color: #3498db;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Library Management System</h1>
+    </header>
+
+    <section>
+        <h2 align="center">Update Loan</h2>
+
+        <form action="{{ url_for('update_loan', loan_id=loan[0]) }}" method="POST">
+            <label for="book_isbn">Book ISBN:</label>
+            <input type="text" name="book_isbn" value="{{ loan[1] }}" required>
+
+            <label for="member_id">Member ID:</label>
+            <input type="text" name="member_id" value="{{ loan[2] }}" required>
+
+            <label for="loan_date">Loan Date:</label>
+            <input type="date" name="loan_date" value="{{ loan[3] }}" required>
+
+            <label for="return_date">Return Date:</label>
+            <input type="date" name="return_date" value="{{ loan[4] }}" required>
+
+            <div class="button-container">
+                <button type="button" onclick="window.location.href='/library_loans_index'" class="back-button">Back to Library Loans Index</button>
+                <button type="submit" class="update-button">Update Loan</button>
+            </div>
+        </form>
+    </section>
+
+</body>
+
+</html>

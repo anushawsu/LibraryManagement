@@ -581,6 +581,51 @@ def generate_loan_id():
     return str(random.randint(1000000000, 9999999999))
 
 
+# Route for rendering the update loan page
+@app.route('/update_loan/<int:loan_id>', methods=['GET', 'POST'])
+def update_loan(loan_id):
+    # Connect to the database
+    conn = get_db()
+    cursor = conn.cursor()
+
+    if request.method == 'POST':
+        # Get form data
+        book_isbn = request.form.get('book_isbn')
+        member_id = request.form.get('member_id')
+        loan_date = request.form.get('loan_date')
+        return_date = request.form.get('return_date')
+
+        # Update the loan in the BookLoan table based on the given LoanID
+        cursor.execute('''
+            UPDATE BookLoan
+            SET ISBN = ?, MemberID = ?, LoanDate = ?, ReturnDate = ?
+            WHERE LoanID = ?
+        ''', (book_isbn, member_id, loan_date, return_date, loan_id))
+
+        # Commit the changes and close the cursor and database connection
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        # Redirect to the library loans index page after updating
+        return redirect('/library_loans_index')
+    else:
+        # Retrieve existing loan details for the specified LoanID
+        cursor.execute('SELECT * FROM BookLoan WHERE LoanID = ?', (loan_id,))
+        loan_details = cursor.fetchone()
+
+        # Close the cursor and database connection
+        cursor.close()
+        conn.close()
+
+        if loan_details:
+            # Render the update_loan.html template with the existing loan details
+            return render_template('update_loan.html', loan=loan_details)
+        else:
+            # Handle case where LoanID is not found
+            return "Loan not found."
+
+
 
 
 

@@ -534,6 +534,52 @@ def loan_details(loan_id):
         # Handle case where LoanID is not found
         return "Loan not found."
 
+# Route to render the add loan form
+@app.route('/add_loan', methods=['GET', 'POST'])
+def add_loan():
+    # Connect to the database
+    conn = get_db()
+    cursor = conn.cursor()
+
+    if request.method == 'POST':
+        # Get form data
+        book_isbn = request.form['book_isbn']
+        member_id = request.form['member_id']
+        loan_date = request.form['loan_date']
+        return_date = request.form['return_date']
+
+        # Generate a new Loan ID
+        loan_id = generate_loan_id()
+
+        # Insert into the BookLoan table
+        cursor.execute('INSERT INTO BookLoan (LoanID, ISBN, MemberID, LoanDate, ReturnDate) VALUES (?, ?, ?, ?, ?)',
+                       (loan_id, book_isbn, member_id, loan_date, return_date))
+
+        # Commit the changes and close the cursor and database connection
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        # Redirect to the library loans index page
+        return redirect('/library_loans_index')
+    else:
+        # Fetch books and members for the dropdowns
+        cursor.execute('SELECT * FROM Book')
+        books = cursor.fetchall()
+
+        cursor.execute('SELECT * FROM LibraryMember')
+        members = cursor.fetchall()
+
+        # Close the cursor and database connection
+        cursor.close()
+        conn.close()
+
+        return render_template('add_loan.html', books=books, members=members)
+
+def generate_loan_id():
+    # Generate a random 10-digit number as the Loan ID
+    return str(random.randint(1000000000, 9999999999))
+
 
 
 

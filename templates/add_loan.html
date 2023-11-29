@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Library Management System - Add New Loan</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        header {
+            background-color: #2ecc71;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 36px;
+        }
+
+        section {
+            margin: 20px;
+        }
+
+        h2 {
+            font-size: 24px;
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            max-width: 400px;
+            margin: auto;
+            margin-bottom: 20px; 
+        }
+
+        label {
+            margin-bottom: 10px;
+        }
+
+        input,
+        select {
+            padding: 10px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            width: 100%;
+        }
+
+        button {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            width: 150px; /* Set a specific width for the buttons */
+            margin-right: 10px; /* Add some space between buttons */
+        }
+
+        .back-button,
+        .add-button {
+            background-color: #3498db;
+            color: #fff;
+        }
+
+        .back-button:hover,
+        .add-button:hover {
+            background-color: #2980b9;
+        }
+
+        .footer {
+            background-color: #3498db;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .add-button {
+            background-color: #2ecc71;
+            color: #fff;
+            width: auto;
+        }
+
+        .add-button:hover {
+            background-color: #27ae60;
+        }
+        
+    </style>
+
+    <script>
+        // JavaScript function to set default return date 14 days from the loan date
+        function setDefaultReturnDate() {
+            // Get the loan date input value
+            var loanDateInput = document.getElementById('loan_date');
+            var loanDate = new Date(loanDateInput.value);
+
+            // Calculate the return date (loan date + 14 days)
+            var returnDate = new Date(loanDate);
+            returnDate.setDate(returnDate.getDate() + 14);
+
+            // Format the return date as YYYY-MM-DD
+            var formattedReturnDate = returnDate.toISOString().split('T')[0];
+
+            // Set the default value for the return date input
+            document.getElementById('return_date').value = formattedReturnDate;
+        }
+    </script>
+
+</head>
+
+<body>
+    <header>
+        <h1>Library Management System</h1>
+    </header>
+
+    <section>
+        <h2 align="center">Add New Loan</h2>
+
+        <form action="{{ url_for('add_loan') }}" method="POST">
+            <label for="book_isbn">Book:</label>
+            <select name="book_isbn" required>
+                {% for book in books %}
+                    <option value="{{ book[0] }}">ISBN: {{ book[0] }} (BookName: {{ book[1] }})</option>
+                {% endfor %} 
+            </select>
+
+            <label for="member_id">Member:</label>
+            <select name="member_id" required>
+                {% for member in members %}
+                    <option value="{{ member[0] }}">{{ member[1] }} {{ member[2] }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="loan_date">Loan Date:</label>
+            <input type="date" name="loan_date" id="loan_date" onchange="setDefaultReturnDate()" required>
+
+            <label for="return_date">Return Date: (By default 14 days return date)</label>
+            <input type="date" name="return_date" id="return_date" required>
+
+            <div style="display: flex; justify-content: center;">
+                <button type="button" onclick="window.location.href='/library_loans_index'" class="back-button">Back to Loan Index</button>
+                <button type="submit" class="add-button">Add Loan</button>
+            </div>
+
+        </form>
+    </section>
+</body>
+
+</html>

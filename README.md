@@ -1,3 +1,7 @@
+# Anusha Potla- anushawsu
+# Jahnavi Bodlapati- jahnavi1323
+# Mrudhula Lakshmi Yakkanti- mrudhula771
+
 # LibraryManagaement System
 # Library Management system databse has Four modules:-
 
